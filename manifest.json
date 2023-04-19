@@ -1,0 +1,57 @@
+{
+    "manifest_version": 3,
+    "name": "LuxenGPT",
+    "version": "1.0",
+    "description": "An extension that allows you to read and reply to Gmail messages using chat GPT",
+    "icons": {
+        "128": "icons/32.png",
+        "64": "icons/32.png",
+        "16": "icons/32.png",
+        "32": "icons/32.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.midjourney.com/*"
+            ],
+            "js": [
+                "script.js"
+            ],
+            "css": [
+                "css/style.css"
+            ]
+        }
+    ],
+    "host_permissions": [
+        "https://*/",
+        "http://*/"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_icon": {
+            "32": "icons/32.png"
+        },
+        "default_title": "midjourney"
+    },
+    "options_ui": {
+        "page": "index.html",
+        "open_in_tab": true
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "activeTab"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "icons/*"
+            ],
+            "matches": [
+                "https://www.midjourney.com/*"
+            ]
+        }
+    ]
+}
