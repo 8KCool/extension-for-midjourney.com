@@ -1,16 +1,18 @@
 .fav-button {
-  width: 24px;
-  height: 24px;
+  width: 50px;
+  height: 50px;
   background-size: 100% 100%;
   border-radius: 5px;
   position: absolute;
   top: 6px;
   left: 6px;
-  z-index: 1000;
+  z-index: 9000;
+  cursor: pointer;
 }
 
 .fav-pannel {
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
