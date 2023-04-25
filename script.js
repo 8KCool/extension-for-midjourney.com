@@ -42,10 +42,8 @@ const renderFavButton = (gridElement) => {
 
   // init add fav function
   button.addEventListener('click', function (event) {
-    event.preventDefault();
 
     // checkFavState return value- 1: added already, 0: empty added
-    debugger;
     if (checkFavState(gridElement)) {
       decrementFavImage(jobId, (result) => {
         drawHeartIcon(0, gridElement); // remove Icon
@@ -62,7 +60,7 @@ const renderFavButton = (gridElement) => {
       });
 
     }
-
+    event.stopImmediatePropagation();
   });
 }
 
@@ -116,19 +114,27 @@ const decrementFavImage = (jobId, callback) => {
 }
 
 const drawHeartIcon = (state, gridElement) => {
-  debugger;
   const parentElement = gridElement.parentNode;
   if (!parentElement) return;
   const heartParentElement = parentElement.querySelector(".absolute.justify-end.items-end.max-h-full.rounded-xl.cursor-pointer");
   if (state) { // draw
-
     if (heartParentElement) {
-      heartParentElement.append('<div class="absolute bottom-0 translate-y-1/2 right-2 shrink-0 cursor-auto justify-self-end opacity-100"><div class="flex flex-col justify-between self-end text-orange-500 w-full text-base rounded-full bg-darkBlue-900  duration-150  transition-color border-darkBlue-900 border-[1px] px-0.5"> <div class="flex w-full min-w-max items-stretch justify-between gap-1 self-end p-1 text-base">  <div class="flex aspect-square h-4 w-4 shrink-0 items-center justify-center"><svg height="14" class="inline-block -mt-0.5 text-rose-500" width="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" xmlns="http://www.w3.org/2000/svg"> <g id="Heart">  <path fill-rule="evenodd" clip-rule="evenodd"d="M13.1027 2.69607C14.1724 2.17246 15.1056 2 16.5532 2.00002C20.2579 2.01536 23 5.13984 23 9.11988C23 12.1578 21.3062 15.0923 18.1512 17.9299C16.4951 19.4193 14.3807 20.8933 12.8664 21.6775L12 22.1261L11.1336 21.6775C9.61932 20.8933 7.50489 19.4193 5.84884 17.9299C2.69383 15.0923 1 12.1578 1 9.11988C1 5.09727 3.71644 2 7.45455 2C8.85028 2 9.83132 2.18878 10.9218 2.72813C11.3015 2.91592 11.6582 3.13866 11.99 3.39576C12.335 3.12339 12.7066 2.88993 13.1027 2.69607Z">  </path> </g></svg></div> </div></div>  </div>');
+      if (heartParentElement.querySelector(".absolute.bottom-0 .items-stretch")) { // if there is any other badge? 
+        var tag = heartParentElement.querySelector(".absolute.bottom-0 .items-stretch");
+        tag.innerHTML = '<div class="flex aspect-square h-4 w-4 shrink-0 items-center justify-center"><svg height="14" class="inline-block -mt-0.5 text-rose-500" width="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" xmlns="http://www.w3.org/2000/svg"> <g id="Heart"><path fill-rule="evenodd" clip-rule="evenodd"  d="M13.1027 2.69607C14.1724 2.17246 15.1056 2 16.5532 2.00002C20.2579 2.01536 23 5.13984 23 9.11988C23 12.1578 21.3062 15.0923 18.1512 17.9299C16.4951 19.4193 14.3807 20.8933 12.8664 21.6775L12 22.1261L11.1336 21.6775C9.61932 20.8933 7.50489 19.4193 5.84884 17.9299C2.69383 15.0923 1 12.1578 1 9.11988C1 5.09727 3.71644 2 7.45455 2C8.85028 2 9.83132 2.18878 10.9218 2.72813C11.3015 2.91592 11.6582 3.13866 11.99 3.39576C12.335 3.12339 12.7066 2.88993 13.1027 2.69607Z"></path>   </g>    </svg></div>' + tag.innerHTML;
+      }
+      else
+        heartParentElement.innerHTML += '<div class="absolute bottom-0 translate-y-1/2 right-2 shrink-0 cursor-auto justify-self-end opacity-100"><div class="flex flex-col justify-between self-end text-orange-500 w-full text-base rounded-full bg-darkBlue-900  duration-150  transition-color border-darkBlue-900 border-[1px] px-0.5"> <div class="flex w-full min-w-max items-stretch justify-between gap-1 self-end p-1 text-base">  <div class="flex aspect-square h-4 w-4 shrink-0 items-center justify-center"><svg height="14" class="inline-block -mt-0.5 text-rose-500" width="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" xmlns="http://www.w3.org/2000/svg"> <g id="Heart">  <path fill-rule="evenodd" clip-rule="evenodd"d="M13.1027 2.69607C14.1724 2.17246 15.1056 2 16.5532 2.00002C20.2579 2.01536 23 5.13984 23 9.11988C23 12.1578 21.3062 15.0923 18.1512 17.9299C16.4951 19.4193 14.3807 20.8933 12.8664 21.6775L12 22.1261L11.1336 21.6775C9.61932 20.8933 7.50489 19.4193 5.84884 17.9299C2.69383 15.0923 1 12.1578 1 9.11988C1 5.09727 3.71644 2 7.45455 2C8.85028 2 9.83132 2.18878 10.9218 2.72813C11.3015 2.91592 11.6582 3.13866 11.99 3.39576C12.335 3.12339 12.7066 2.88993 13.1027 2.69607Z">  </path> </g></svg></div> </div></div>  </div>';
     }
   }
   else { // remove
     if (heartParentElement) {
-      heartParentElement.innerHTML('<div class="absolute inset-0 h-full w-full"></div>')
+      if (heartParentElement.querySelector(".absolute.bottom-0")) { // if there is any other badge? 
+        parentElement.querySelector("#Heart").parentNode.parentNode.remove();
+      }
+      else {
+        heartParentElement.innerHTML = '<div class="absolute inset-0 h-full w-full"></div>';
+      }
     }
   }
 }
