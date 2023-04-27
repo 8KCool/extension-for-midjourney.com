@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "LuxenGPT",
+    "name": "Favorite Midjourney",
     "version": "1.0",
     "description": "An extension that allows you to read and reply to Gmail messages using chat GPT",
     "icons": {

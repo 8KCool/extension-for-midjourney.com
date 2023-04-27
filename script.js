@@ -22,46 +22,48 @@ const initFavButton = () => {
 }
 
 const checkUserLoggedIn = () => {
-  const hotSortbutton = document.querySelectorAll('[title="Sort by Hot"]');
+  const hotSortbutton = document.querySelectorAll('#headlessui-menu-button-2');
   if (hotSortbutton.length > 0)
     return true;
   return false;
 }
 
 const renderFavButton = (gridElement) => {
-  const childElement = document.createElement('div');
-  childElement.classList.add("fav-panel")
-  const imageUrl = chrome.runtime.getURL('icons/32.png');
-  const button = document.createElement('div');
-  button.classList.add('fav-button');
-  button.setAttribute('style', `background-image:url("${imageUrl}")`);
-  gridElement.appendChild(childElement);
-  childElement.appendChild(button);
+  const favButton = gridElement.querySelector('.fav-panel');
+  if (!favButton) {
+    const childElement = document.createElement('div');
+    childElement.classList.add("fav-panel")
+    const imageUrl = chrome.runtime.getURL('icons/32.png');
+    const button = document.createElement('div');
+    button.classList.add('fav-button');
+    button.setAttribute('style', `background-image:url("${imageUrl}")`);
+    gridElement.appendChild(childElement);
+    childElement.appendChild(button);
 
-  let jobId = getJobId(gridElement);
+    let jobId = getJobId(gridElement);
 
-  // init add fav function
-  button.addEventListener('click', function (event) {
+    // init add fav function
+    button.addEventListener('click', function (event) {
+      // checkFavState return value- 1: added already, 0: empty added
+      if (checkFavState(gridElement)) {
+        decrementFavImage(jobId, (result) => {
+          drawHeartIcon(0, gridElement); // remove Icon
+        });
+      }
+      else {
+        incrementFavImage(jobId, (result) => {
+          if (result == 1) {
+            drawHeartIcon(1, gridElement); // draw Icon
+          }
+          else {
+            console.log(result.error);
+          }
+        });
 
-    // checkFavState return value- 1: added already, 0: empty added
-    if (checkFavState(gridElement)) {
-      decrementFavImage(jobId, (result) => {
-        drawHeartIcon(0, gridElement); // remove Icon
-      });
-    }
-    else {
-      incrementFavImage(jobId, (result) => {
-        if (result == 1) {
-          drawHeartIcon(1, gridElement); // draw Icon
-        }
-        else {
-          console.log(result.error);
-        }
-      });
-
-    }
-    event.stopImmediatePropagation();
-  });
+      }
+      event.stopImmediatePropagation();
+    });
+  }
 }
 
 const getJobId = (gridElement) => {
@@ -142,15 +144,7 @@ const drawHeartIcon = (state, gridElement) => {
 function event_Container(mutations) {
   const gridElements = document.querySelectorAll('[role="grid"] .grid.relative');
   gridElements.forEach((gridElement) => {
-    const favButton = gridElement.querySelector('.fav-panel');
-    if (!favButton) {
-      const childElement = document.createElement('div');
-
-      childElement.classList.add("fav-panel")
-      const imageUrl = chrome.runtime.getURL('icons/32.png');
-      childElement.innerHTML = `<div class='fav-button' id="headlessui-menu-item-15" style='background-image:url("${imageUrl}")'></div>`
-      gridElement.appendChild(childElement);
-    }
+    renderFavButton(gridElement);
   });
 }
 
